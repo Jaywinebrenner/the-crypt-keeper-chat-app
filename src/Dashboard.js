@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
 
     
     // CTX Store
-  const [allChats] = React.useContext(CTX)
+  const {allChats, sendChatAction, user} = React.useContext(CTX)
   console.log("All Chats", allChats);
   
   const topics = Object.keys(allChats);
@@ -123,7 +123,15 @@ const useStyles = makeStyles((theme) => ({
           value={textValue}
           variant="filled"
         />
-        <Button className={classes.button} variant="contained" color="primary">
+        <Button 
+        className={classes.button} 
+        variant="contained" 
+        color="primary"
+        onClick={()=> {
+          sendChatAction({from: user, msg: textValue, topic: activeTopic});
+          setTextValue('');
+        }}
+        >
           Send
         </Button>
       </div>

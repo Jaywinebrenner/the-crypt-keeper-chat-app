@@ -35,7 +35,13 @@ const reducer = (state, action) => {
 }
 
 
+
+
 let socket; 
+
+const sendChatAction = (value) => {
+  socket.emit("chat message", value);
+};
 
 const Store = (props) => {
 
@@ -43,10 +49,14 @@ const Store = (props) => {
     socket = io(':3001')
   }
 
-const reducerHook = React.useReducer(reducer, initialState)
+  // const user = ["Count Dracula", "The Mummy", "The Crypt Keeper", "Leprechaun", "Meredith Brooks"]
+
+  const user = "Meredith Brooks" + Math.random(100).toFixed(2)
+
+const [allChats] = React.useReducer(reducer, initialState)
 
   return (
-    <CTX.Provider value={reducerHook}>
+    <CTX.Provider value={{allChats, sendChatAction, user}}>
       {props.children}
     </CTX.Provider>
   )
