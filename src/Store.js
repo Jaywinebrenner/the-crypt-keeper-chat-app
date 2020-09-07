@@ -1,30 +1,16 @@
 import React from 'react';
+import io from 'socket.io-client'
 
-const CTX = React.createContext();
+export const CTX = React.createContext();
 
-
-// msg {
-//   from: 'user'
-//   msg: 'hi'
-//   topic: 'general'
-// }
-
-// state {
-//   general: [
-//     {msg}, {msg}, {msg}
-//   ]
-//   vampires: [
-//     {msg}, {msg}, {msg}
-//   ]
-// }
 
 const initialState = {
-  ghouls: [
+  Puns: [
     { from: "The Crypt Keeper", msg: "Greetings" },
     { from: "Dracula", msg: "I vant to suck your blood" },
     { from: "Igor", msg: "Masthter!" },
   ],
-  vampires: [
+  Recipies: [
     { from: "Mummy", msg: "Ugg" },
     { from: "Goblin", msg: "I'm hungry" },
     { from: "Reggie", msg: "When is Press Your Luck on?" },
@@ -48,7 +34,14 @@ const reducer = (state, action) => {
   }
 }
 
+
+let socket; 
+
 const Store = (props) => {
+
+  if (!socket) {
+    socket = io(':3001')
+  }
 
 const reducerHook = React.useReducer(reducer, initialState)
 

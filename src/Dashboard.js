@@ -11,6 +11,8 @@ import Chip from "@material-ui/core/Chip";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 
+import Store, {CTX} from './Store'
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -21,74 +23,92 @@ const useStyles = makeStyles((theme) => ({
   },
   flex: {
     display: "flex",
-    alignItems: 'center' //will align items vertically
+    alignItems: "center", //will align items vertically
   },
   cryptKeeper: {
     height: "120px",
     display: "absolute",
-    borderRadius: '50%'
+    borderRadius: "50%",
   },
   topicsWindow: {
-    width: '30%',
-    height: '300px',
-    borderRight: '1px solid gray'
+    width: "30%",
+    height: "300px",
+    borderRight: "1px solid gray",
   },
   chatWindow: {
-    padding: '20px',
-    width: '70%',
-    height: '300px'
+    padding: "20px",
+    width: "70%",
+    height: "300px",
   },
   chatBox: {
-    width: "85%"
+    width: "85%",
   },
   button: {
-    width: '15%'
+    width: "15%",
+    marginLeft: "10px",
+    height: "55px",
   },
   input: {
     marginRight: "5px",
-    width: "200px"
+    width: "200px",
   },
-  button: {
-    height: "55px",
-    width: "100px",
-    marginLeft: "10px"
-  }
 }));
 
-const Dashboard = () => {
+  const Dashboard = () => {
 
+    let audio = new Audio("/laugh.mp3");
+    const makeLaugh = () => {
+      audio.play();
+    };
 
-  const array = ["fart", 'poop', 'pee', 'strawberry', 'peach']
-  const classes = useStyles();
-  const [textValue, setTextValue] = useState('')
+    
+    // CTX Store
+  const [allChats] = React.useContext(CTX)
+  console.log("All Chats", allChats);
   
-  console.log(textValue);
+  const topics = Object.keys(allChats);
+
+  const classes = useStyles();
+
+  // Local State
+  const [textValue, setTextValue] = useState('')
+  const [activeTopic, setActiveTopic] = useState(topics[0])
 
   return (
     <Paper className={classes.root} elevation={3}>
-      <img className={classes.cryptKeeper} src={Logo}></img>
+        <img
+          onClick={makeLaugh}
+          className={classes.cryptKeeper}
+          src={Logo}
+        />
       <Typography variant="h3">The Crypt Keeper Chat App</Typography>
       <Typography variant="p">
         EnCRYPTed chat for your fiends and family
       </Typography>
 
-      <Typography variant="h5">Topic Placeholder</Typography>
+      <Typography variant="h5">{activeTopic}</Typography>
 
       <div className={classes.flex}>
         <div className={classes.topicsWindow}>
           <List>
-            {array.map((topic) => (
-              <ListItem key={topic} button>
+            {topics.map((topic) => (
+              <ListItem
+                onClick={(e) => setActiveTopic(e.target.innerText)}
+                key={topic}
+                button
+              >
                 <ListItemText primary={topic} />
               </ListItem>
             ))}
           </List>
         </div>
         <div className={classes.chatWindow}>
-          {[{ from: "user", msg: "greetings" }].map((chat, i) => (
+          {allChats[activeTopic].map((chat, i) => (
             <div className={classes.flex} key={i}>
               <Chip label={chat.from} className={classes.chip} />
-              <Typography variant="p">{chat.msg}</Typography>
+              <Typography variant="body1" gutterBottom>
+                {chat.msg}
+              </Typography>
             </div>
           ))}
         </div>
