@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -8,6 +8,10 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Chip from "@material-ui/core/Chip";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,14 +44,25 @@ const useStyles = makeStyles((theme) => ({
   button: {
     width: '15%'
   },
+  input: {
+    marginRight: "5px",
+    width: "200px"
+  },
+  button: {
+    height: "55px",
+    width: "100px",
+    marginLeft: "10px"
+  }
 }));
 
 const Dashboard = () => {
 
 
   const array = ["fart", 'poop', 'pee', 'strawberry', 'peach']
-
   const classes = useStyles();
+  const [textValue, setTextValue] = useState('')
+  
+  console.log(textValue);
 
   return (
     <Paper className={classes.root} elevation={3}>
@@ -70,18 +85,28 @@ const Dashboard = () => {
           </List>
         </div>
         <div className={classes.chatWindow}>
-
-          {[{from: 'user', msg: 'greetings'}].map((chat, i) => (
+          {[{ from: "user", msg: "greetings" }].map((chat, i) => (
             <div className={classes.flex} key={i}>
-              <Chip label={chat.from} className={classes.chip}/>
-              <Typography variant='p'>{chat.msg}</Typography>
-
+              <Chip label={chat.from} className={classes.chip} />
+              <Typography variant="p">{chat.msg}</Typography>
             </div>
           ))}
         </div>
       </div>
 
-      <div></div>
+      <div className={classes.flex}>
+        <TextField
+          // required
+          className={classes.chatBox}
+          label="Send a message"
+          onChange={(e) => setTextValue(e.target.value)}
+          value={textValue}
+          variant="filled"
+        />
+        <Button className={classes.button} variant="contained" color="primary">
+          Send
+        </Button>
+      </div>
     </Paper>
   );
 }
